@@ -3,11 +3,12 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class OS {
 
-	static HashMap pageTable; 
+	static HashMap<Integer, Integer> pageTable = new HashMap<Integer, Integer>();
 	Page[] pageObj; //memory
 	String tableSizes[];
 	
@@ -32,41 +33,64 @@ public class OS {
 		//need to read in initial line to get numPages & numBytes
 		//set the size of the pageObj and data arrays
 		
-		String initialLine = inputFile.readLine();
+		String initialLine = null;
+		try {
+			initialLine = inputFile.readLine();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		//split into numPages and numBytes
 		tableSizes = initialLine.split(" ");
 		int numPages = Integer.parseInt( tableSizes[0] );
 		int numBytes = Integer.parseInt( tableSizes[1] );
 		
+		//set the size of the array
 		pageObj = new Page[numPages];
 		String reader = null;
-		while ( ( reader = inputFile.readLine() ) != null) {
-//			pageObj[]
+
+		//now that we set the size of the pageObj array
+		//read through file and...
+		//create pageTable mappings
+		//insert data into byte array
+		
+
+		
+		
+		try {
+			while ( ( reader = inputFile.readLine() ) != null) {
+				int counter = 0;
+				if (isItData(reader) ) {
+					//if true, then this is data...handle accordingly
+					String[] split = reader.split("\\-\\>");
+					pageTable.put( Integer.parseInt( split[0] ),  Integer.parseInt( split[1] ) );
+				} else {
+					//if false, then not data, handle accordingly...
+					byte[] data = new byte[numBytes]; 
+					data = reader.getBytes();
+					pageObj[counter] = new Page(counter, numBytes, data);
+				}
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			System.out.println("Error reading in lines...");
 		}
 		
-		
-		
-		
-		
-		
-		
-		//if we get here, then data should be in a list of strings called listData...
-		//now we need to convert strings to a Byte array
-//		byte[] byteData = new byte[ listData.size() ];
-//		for (byte data1 : byteData) {
-//			
-//		}
-//		
-//		return byteData;
+
 
 	}
 
 	
 	
-	
-	
-	
-	
-	
+	private boolean isItData(String reader) {
+		//regex
+		String strSearch = "d+\\-\\>d+";
+		Pattern patSearch = Pattern.compile(strSearch);
+		Matcher matSearch = patSearch.matcher(reader);
+		return matSearch.find();
+	}
+
 	private static int getPPN( int vpn ) {
 		return pageTable.get( vpn );
 	}
