@@ -1,0 +1,18 @@
+8 16
+0->4
+1->7
+2->5
+3->3
+4->0
+5->6
+6->1
+7->2
+This_file_is_enc
+oded_using_UTF-8
+.This_means_that
+each_letter_or_u 
+nderscore_is_sto
+red_using_1_byte
+.So_each_line_co
+ntains_16_chars.
+
