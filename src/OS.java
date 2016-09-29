@@ -65,7 +65,7 @@ public class OS {
 			while ( ( reader = inputFile.readLine() ) != null) {
 //				System.out.println("Enter while loop");
 				int counter = 0;
-				if (isItData(reader) ) {
+				if (isItAMap(reader) ) {
 					//if true, then this is data...handle accordingly
 					System.out.println("if fired...");
 					String[] split = reader.split("\\->");
@@ -76,6 +76,7 @@ public class OS {
 					//if false, then not data, handle accordingly...
 					byte[] data = new byte[numBytes]; 
 					data = reader.getBytes();
+					//need to use getPPN to figure out where to place the page!!!
 					pageObj[counter] = new Page(counter, numBytes, data);
 				}
 			}
@@ -90,7 +91,7 @@ public class OS {
 
 	
 	
-	private boolean isItData(String reader) {
+	private boolean isItAMap(String reader) {
 		//regex
 		System.out.println("is it data?");
 		String strSearch = "d*\\->d*";
