@@ -8,7 +8,7 @@ import java.util.regex.Pattern;
 
 public class OS {
 
-	static HashMap<Integer, Integer> pageTable = new HashMap<Integer, Integer>();
+	static HashMap<Integer, Integer> pageTable = new HashMap<Integer, Integer>(); //(vpn, ppn)
 	static Page[] pageObj; //memory
 	String tableSizes[];
 	
@@ -105,13 +105,14 @@ public class OS {
 	}
 	
 	private static byte getDataAtVirtAddress( int virtAddress ) {
-		
+		//not sure how I am supposed to use this method...
 		return (Byte) null;
 	}
 	
 	public static void main(String[] args) {
 		
 		OS os = new OS("/Users/Krirk-Mac/Documents/workspace/OSProj2/src/proj2_data1.txt");
+		System.out.println(getPPN(2));
 
 	}
 	
