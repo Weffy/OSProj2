@@ -1,0 +1,17 @@
+8 16
+0->7
+1->0
+2->2
+3->6
+4->3
+5->1
+6->5
+7->4
+the data at each
+then you will se
+virtual address,
+d going to 127,  
+n order.  Try it
+e this message i
+starting at 0 an
+If you print out
