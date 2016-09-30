@@ -22,7 +22,7 @@ public class Page {
 	}
 	
 	
-	private byte getData( int offset ) {
+	public byte getData( int offset ) {
 		if ( exists() ) {
 			return this.getByte( offset );	
 		} else {

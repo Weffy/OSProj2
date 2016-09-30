@@ -2,6 +2,7 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -62,9 +63,10 @@ public class OS {
 		
 		
 		try {
+			int counter = 0;
 			while ( ( reader = inputFile.readLine() ) != null) {
 //				System.out.println("Enter while loop");
-				int counter = 0;
+				
 				if (isItAMap(reader) ) {
 					//if true, then this is data...handle accordingly
 //					System.out.println("if fired...");
@@ -73,10 +75,19 @@ public class OS {
 //					System.out.println(Integer.parseInt( split[0]));
 //					System.out.println(Integer.parseInt( split[1]));
 				} else {
+					
+//					
+//					byte[] message = new byte[BUFFER_SIZE];
+//					message = msgToReceiver.getBytes();
+					
+					
+//					System.out.println("counter: " + counter);
+//					counter++;
 					//if false, then not data, handle accordingly...
 					byte[] data = new byte[numBytes]; 
+					System.out.println("Reader: " + reader);
+					System.out.println("array: " + Arrays.toString(data));
 					data = reader.getBytes();
-					//need to use getPPN to figure out where to place the page!!!
 					pageObj[counter] = new Page(counter, numBytes, data);
 				}
 			}
@@ -89,7 +100,9 @@ public class OS {
 
 	}
 
-	
+	public Page getPage(int ppn) {
+		return pageObj[ppn];
+	}
 	
 	private boolean isItAMap(String reader) {
 		//regex
@@ -114,7 +127,9 @@ public class OS {
 		OS os1 = new OS("/Users/Krirk-Mac/Documents/workspace/OSProj2/src/proj2_data1.txt");
 		OS os2 = new OS("/Users/Krirk-Mac/Documents/workspace/OSProj2/src/proj2_data2.txt");
 		System.out.println("PPN " + os1.getPPN(2));
-		System.out.println("PPN " + os2.getPPN(2));
+//		System.out.println("PPN " + os2.getPPN(2));
+		
+		
 	}
 	
 }
