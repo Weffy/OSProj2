@@ -26,7 +26,8 @@ public class OS {
 		
 		try {
 			inputFile = new BufferedReader( new FileReader( filename ) );
-//			System.out.println("File exists...");
+			
+			System.out.println("File exists...");
 		} catch (FileNotFoundException e1) {
 			System.out.println("File does not exist...");
 		}
@@ -38,6 +39,7 @@ public class OS {
 		String initialLine = null;
 		try {
 			initialLine = inputFile.readLine();
+			System.out.println("Initial Line: " + initialLine);
 //			System.out.println(initialLine);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -48,12 +50,12 @@ public class OS {
 		tableSizes = initialLine.split(" ");
 		int numPages = Integer.parseInt( tableSizes[0] );
 		int numBytes = Integer.parseInt( tableSizes[1] );
-//		System.out.println("numPages: " + numPages);
-//		System.out.println("numBytes: " + numBytes);
+		System.out.println("numPages: " + numPages);
+		System.out.println("numBytes: " + numBytes);
 		//set the size of the array
 		pageObj = new Page[numPages];
 		String reader = null;
-//		System.out.println(pageObj.length);
+		System.out.println("pageObj array length: " + pageObj.length);
 		//now that we set the size of the pageObj array
 		//read through file and...
 		//create pageTable mappings
@@ -66,30 +68,25 @@ public class OS {
 			int counter = 0;
 			while ( ( reader = inputFile.readLine() ) != null) {
 //				System.out.println("Enter while loop");
-				
+				System.out.println("\nreader: " + reader);
 				if (isItAMap(reader) ) {
 					//if true, then this is data...handle accordingly
-//					System.out.println("if fired...");
+					System.out.println("it IS a map!\n");
 					String[] split = reader.split("\\->");
 					pageTable.put( Integer.parseInt( split[0] ),  Integer.parseInt( split[1] ) );
-//					System.out.println(Integer.parseInt( split[0]));
-//					System.out.println(Integer.parseInt( split[1]));
+					System.out.println("virt add: " + Integer.parseInt( split[0]));
+					System.out.println("phys add: " + Integer.parseInt( split[1]));
 				} else {
+					System.out.println("We have data!\n");					
+					System.out.println("pageObj aka phys memory: " + counter + "\n");
 					
-//					
-//					byte[] message = new byte[BUFFER_SIZE];
-//					message = msgToReceiver.getBytes();
-					
-					
-//					System.out.println("counter: " + counter);
-//					counter++;
 					//if false, then not data, handle accordingly...
 					byte[] data = new byte[numBytes]; 
 //					System.out.println("Reader: " + reader);
 //					System.out.println( new String(data) );
 					data = reader.getBytes();
 //					System.out.println("Reader: " + reader);
-//					System.out.println( "data: " + new String(data) );
+					System.out.println( "data: " + new String(data) );
 					pageObj[counter] = new Page(counter, numBytes, data);
 					counter++;
 				}
@@ -126,15 +123,20 @@ public class OS {
 	}
 	
 	public static void main(String[] args) {
-		
-//		OS os1 = new OS("/Users/Krirk-Mac/Documents/workspace/OSProj2/src/proj2_data1.txt");
-//		OS os2 = new OS("/Users/Krirk-Mac/Documents/workspace/OSProj2/src/proj2_data2.txt");
+		System.out.println("Data 1");
+		OS os1 = new OS("/Users/Krirk-Mac/Documents/workspace/OSProj2/src/proj2_data1.txt");
+		System.out.println("\n\n\n\nData 2");
+		OS os2 = new OS("/Users/Krirk-Mac/Documents/workspace/OSProj2/src/proj2_data2.txt");
 //		System.out.println("PPN " + os1.getPPN(2));
 //		System.out.println("PPN " + os2.getPPN(2));
 //		System.out.println(os1.getPage(0).getData(0));
+//		
+//		OS os = new OS("/Users/Krirk-Mac/Documents/workspace/OSProj2/src/proj2_data2.txt");
+//		System.out.println(os.getPage(4).getData(3) == 114);
 		
-		OS os = new OS("/Users/Krirk-Mac/Documents/workspace/OSProj2/src/proj2_data2.txt");
-		System.out.println(os.getPage(4).getData(3) == 114);
+//		OS os = new OS("/Users/Krirk-Mac/Documents/workspace/OSProj2/src/proj2_data1.txt");
+//		System.out.println(os.getPPN(2) == 5);
+//		System.out.println(pageTable.get(0));
 	}
 	
 }
