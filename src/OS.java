@@ -85,10 +85,13 @@ public class OS {
 //					counter++;
 					//if false, then not data, handle accordingly...
 					byte[] data = new byte[numBytes]; 
-					System.out.println("Reader: " + reader);
-					System.out.println("array: " + Arrays.toString(data));
+//					System.out.println("Reader: " + reader);
+//					System.out.println( new String(data) );
 					data = reader.getBytes();
+//					System.out.println("Reader: " + reader);
+//					System.out.println( "data: " + new String(data) );
 					pageObj[counter] = new Page(counter, numBytes, data);
+					counter++;
 				}
 			}
 		} catch (IOException e) {
@@ -124,12 +127,14 @@ public class OS {
 	
 	public static void main(String[] args) {
 		
-		OS os1 = new OS("/Users/Krirk-Mac/Documents/workspace/OSProj2/src/proj2_data1.txt");
-		OS os2 = new OS("/Users/Krirk-Mac/Documents/workspace/OSProj2/src/proj2_data2.txt");
-		System.out.println("PPN " + os1.getPPN(2));
+//		OS os1 = new OS("/Users/Krirk-Mac/Documents/workspace/OSProj2/src/proj2_data1.txt");
+//		OS os2 = new OS("/Users/Krirk-Mac/Documents/workspace/OSProj2/src/proj2_data2.txt");
+//		System.out.println("PPN " + os1.getPPN(2));
 //		System.out.println("PPN " + os2.getPPN(2));
+//		System.out.println(os1.getPage(0).getData(0));
 		
-		
+		OS os = new OS("/Users/Krirk-Mac/Documents/workspace/OSProj2/src/proj2_data2.txt");
+		System.out.println(os.getPage(4).getData(3) == 114);
 	}
 	
 }

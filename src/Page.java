@@ -5,7 +5,10 @@ public class Page {
 	
 	public Page(int counter, int numBytes, byte[] data) {
 		this.pageNum = counter;
-		data = new byte[ numBytes ];
+		this.data = new byte[ numBytes ];
+//		System.out.println( "this data: " + new String(this.data) );
+//		System.out.println( "In Page class: " + new String(data) );
+//		System.out.println( "data: " + new String(data) );
 		this.data = data;
 	}
 
