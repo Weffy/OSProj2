@@ -11,7 +11,7 @@ public class OS {
 
 	static HashMap<Integer, Integer> pageTable = new HashMap<Integer, Integer>(); //(vpn, ppn)
 	static Page[] pageObj; //memory
-	String tableSizes[];
+	String tableSizes[]; //just used when we get the initial line of a file to set the number of pages, and the page table size
 	
 	
 	public OS( String filename ) {
@@ -20,6 +20,9 @@ public class OS {
 
 	}
 	
+	//essentially the heavy lifter
+	//right now it is a giant method...
+	//ideally, we can modularize this so it can call other methods so everything is neater...
 	private void parseFile(String filename) {
 		BufferedReader inputFile = null;
 		//open filename and setup BufferedReader...
@@ -27,7 +30,7 @@ public class OS {
 		try {
 			inputFile = new BufferedReader( new FileReader( filename ) );
 			
-			System.out.println("File exists...");
+
 		} catch (FileNotFoundException e1) {
 			System.out.println("File does not exist...");
 		}
@@ -39,8 +42,7 @@ public class OS {
 		String initialLine = null;
 		try {
 			initialLine = inputFile.readLine();
-			System.out.println("Initial Line: " + initialLine);
-//			System.out.println(initialLine);
+
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -48,45 +50,34 @@ public class OS {
 		
 		//split into numPages and numBytes
 		tableSizes = initialLine.split(" ");
+		
 		int numPages = Integer.parseInt( tableSizes[0] );
 		int numBytes = Integer.parseInt( tableSizes[1] );
-		System.out.println("numPages: " + numPages);
-		System.out.println("numBytes: " + numBytes);
+		
 		//set the size of the array
 		pageObj = new Page[numPages];
-		String reader = null;
-		System.out.println("pageObj array length: " + pageObj.length);
+
 		//now that we set the size of the pageObj array
 		//read through file and...
 		//create pageTable mappings
 		//insert data into byte array
 		
-
-		
-		
+		String reader = null;
 		try {
-			int counter = 0;
+			int counter = 0; //used as the ppn and where we will place the page into the pageObj array 
 			while ( ( reader = inputFile.readLine() ) != null) {
-//				System.out.println("Enter while loop");
-				System.out.println("\nreader: " + reader);
+				//data will either be a map...or it will be data
+				// if = map
+				// else = data
 				if (isItAMap(reader) ) {
-					//if true, then this is data...handle accordingly
-					System.out.println("it IS a map!\n");
+					//if true, then map...
 					String[] split = reader.split("\\->");
 					pageTable.put( Integer.parseInt( split[0] ),  Integer.parseInt( split[1] ) );
-					System.out.println("virt add: " + Integer.parseInt( split[0]));
-					System.out.println("phys add: " + Integer.parseInt( split[1]));
-				} else {
-					System.out.println("We have data!\n");					
-					System.out.println("pageObj aka phys memory: " + counter + "\n");
-					
-					//if false, then not data, handle accordingly...
+
+				} else {					
+					//if false, then data...
 					byte[] data = new byte[numBytes]; 
-//					System.out.println("Reader: " + reader);
-//					System.out.println( new String(data) );
 					data = reader.getBytes();
-//					System.out.println("Reader: " + reader);
-					System.out.println( "data: " + new String(data) );
 					pageObj[counter] = new Page(counter, numBytes, data);
 					counter++;
 				}
@@ -99,29 +90,52 @@ public class OS {
 
 
 	}
-
+	
+	//returns specified page
 	public Page getPage(int ppn) {
 		return pageObj[ppn];
 	}
 	
+	//uses regex to check if a "->" is present which represents a mapping
 	private boolean isItAMap(String reader) {
 		//regex
-//		System.out.println("is it data?");
 		String strSearch = "d*\\->d*";
 		Pattern patSearch = Pattern.compile(strSearch);
 		Matcher matSearch = patSearch.matcher(reader);
 		return matSearch.find();
 	}
 
+	//returns the phys page num based on virt page num
 	public int getPPN( int vpn ) {
 		return pageTable.get( vpn );
 	}
 	
-	public static byte getDataAtVirtAddress( int virtAddress ) {
+	//according to her explanation...
+	//the lst 7 bits of the 32 bit virtual address will be used for our virt page num and offset
+	//to extract last 4 digits (offset), logical AND with 0b1111 (15 in decimal)
+	//to extract the 3 digits that precede the offset, logical AND with 0b1110000 (112 in decimal)
+	public byte getDataAtVirtAddress( int virtAddress ) {
 		//not sure how I am supposed to use this method...
-		return (Byte) null;
+		//extract last 7 bits...
+		//2^7-1 = 127
+		int extract = virtAddress & 127;
+		
+		// 2^5 + 2^6 + 2^7
+		int vpn = extract & 112;
+		
+		//offset is last 4 bits
+		int offset = extract & 15;
+		
+		int ppn = pageTable.get(vpn);
+		
+		Page page = this.getPage(ppn);
+		
+		return page.getData(offset);
+		
 	}
 	
+	//random garbage and test cases...
+	//not bothering to clean this up...
 	public static void main(String[] args) {
 		System.out.println("Data 1");
 		OS os1 = new OS("/Users/Krirk-Mac/Documents/workspace/OSProj2/src/proj2_data1.txt");

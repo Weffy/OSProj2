@@ -6,9 +6,6 @@ public class Page {
 	public Page(int counter, int numBytes, byte[] data) {
 		this.pageNum = counter;
 		this.data = new byte[ numBytes ];
-//		System.out.println( "this data: " + new String(this.data) );
-//		System.out.println( "In Page class: " + new String(data) );
-//		System.out.println( "data: " + new String(data) );
 		this.data = data;
 	}
 
@@ -16,17 +13,20 @@ public class Page {
 		return this.data[offset];
 	}
 	
-	private boolean exists() {
-		if (this.data.length == 0) {
+	
+	private boolean exists( int offset ) {
+		if (this.data.length == 0 || offset <= 0) {
 			return false;
 		} else {
 			return true;
 		}
 	}
 	
-	
+	//this method needs to throw an exception
+	//her test code is attempting a catch
+	//else it fails
 	public byte getData( int offset ) {
-		if ( exists() ) {
+		if ( exists( offset ) ) {
 			return this.getByte( offset );	
 		} else {
 			System.out.println("Invalid Offset...");
