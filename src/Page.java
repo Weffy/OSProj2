@@ -1,3 +1,6 @@
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 
 public class Page {
 	int pageNum;
@@ -14,8 +17,8 @@ public class Page {
 	}
 	
 	
-	private boolean exists( int offset ) {
-		if (this.data.length == 0 || offset <= 0) {
+	public boolean exists( int offset ) {
+		if (this.data.length == 0 || offset < 0) {
 			return false;
 		} else {
 			return true;
@@ -26,13 +29,15 @@ public class Page {
 	//her test code is attempting a catch
 	//else it fails
 	public byte getData( int offset ) {
-		if ( exists( offset ) ) {
+		
+		try {
 			return this.getByte( offset );	
-		} else {
+		} catch (Exception e1) {
 			System.out.println("Invalid Offset...");
 			byte nullByte = (Byte) null;
 			return nullByte;
 		}
-		 
+		
+
 	}
 }

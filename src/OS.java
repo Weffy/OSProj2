@@ -115,18 +115,24 @@ public class OS {
 	//to extract last 4 digits (offset), logical AND with 0b1111 (15 in decimal)
 	//to extract the 3 digits that precede the offset, logical AND with 0b1110000 (112 in decimal)
 	public byte getDataAtVirtAddress( int virtAddress ) {
+//		System.out.println("virtAdd: " + virtAddress);
 		//not sure how I am supposed to use this method...
 		//extract last 7 bits...
 		//2^7-1 = 127
-		int extract = virtAddress & 127;
+		int extract = virtAddress & 0b1111111;
+//		System.out.println("extract: " + extract);
 		
 		// 2^5 + 2^6 + 2^7
-		int vpn = extract & 112;
+		int vpn = extract & 0b1110000;
+		vpn = vpn >> 4;
+//		System.out.println("vpn: " + vpn);
 		
 		//offset is last 4 bits
-		int offset = extract & 15;
+		int offset = extract & 0b00001111;
+//		System.out.println("offset: " + offset);
 		
-		int ppn = pageTable.get(vpn);
+		int ppn = getPPN(vpn);
+//		System.out.println("ppn: " + ppn);
 		
 		Page page = this.getPage(ppn);
 		
@@ -141,16 +147,25 @@ public class OS {
 		OS os1 = new OS("/Users/Krirk-Mac/Documents/workspace/OSProj2/src/proj2_data1.txt");
 		System.out.println("\n\n\n\nData 2");
 		OS os2 = new OS("/Users/Krirk-Mac/Documents/workspace/OSProj2/src/proj2_data2.txt");
-//		System.out.println("PPN " + os1.getPPN(2));
-//		System.out.println("PPN " + os2.getPPN(2));
-//		System.out.println(os1.getPage(0).getData(0));
-//		
-//		OS os = new OS("/Users/Krirk-Mac/Documents/workspace/OSProj2/src/proj2_data2.txt");
-//		System.out.println(os.getPage(4).getData(3) == 114);
+		System.out.println("PPN " + os1.getPPN(2));
+		System.out.println("PPN " + os2.getPPN(2));
 		
-//		OS os = new OS("/Users/Krirk-Mac/Documents/workspace/OSProj2/src/proj2_data1.txt");
-//		System.out.println(os.getPPN(2) == 5);
+		System.out.println("os1: " + os1.getPage(0).getData(0));
+		
+		System.out.println("os2: " + os2.getPage(0).getData(0) + "\n");
+		
+//		OS os1 = new OS("/Users/Krirk-Mac/Documents/workspace/OSProj2/src/proj2_data1.txt");
+//		System.out.println(os1.getPPN(2) == 5);
 //		System.out.println(pageTable.get(0));
+		
+//		OS os2 = new OS("/Users/Krirk-Mac/Documents/workspace/OSProj2/src/proj2_data2.txt");
+		
+		System.out.println(os2.getPage(4).getData(3) == 114);
+		System.out.println(os2.getDataAtVirtAddress(45) == 115);
+//		System.out.println(os2.getPage(2).getData(13) == 115);
+		//45 = 101101 32 + 8 + 4 + 1
+
+
 	}
 	
 }

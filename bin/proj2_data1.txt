@@ -15,4 +15,3 @@ nderscore_is_sto
 red_using_1_byte
 .So_each_line_co
 ntains_16_chars.
-
