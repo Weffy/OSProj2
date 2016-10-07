@@ -114,7 +114,7 @@ public class OS {
 	//the lst 7 bits of the 32 bit virtual address will be used for our virt page num and offset
 	//to extract last 4 digits (offset), logical AND with 0b1111 (15 in decimal)
 	//to extract the 3 digits that precede the offset, logical AND with 0b1110000 (112 in decimal)
-	public byte getDataAtVirtAddress( int virtAddress ) {
+	public byte getDataAtVirtAddress( int virtAddress ) throws Exception {
 //		System.out.println("virtAdd: " + virtAddress);
 		//not sure how I am supposed to use this method...
 		//extract last 7 bits...
@@ -136,7 +136,13 @@ public class OS {
 		
 		Page page = this.getPage(ppn);
 		
-		return page.getData(offset);
+		try {
+			return page.getData(offset);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			throw e;
+		}
+		
 		
 	}
 	
@@ -150,9 +156,19 @@ public class OS {
 		System.out.println("PPN " + os1.getPPN(2));
 		System.out.println("PPN " + os2.getPPN(2));
 		
-		System.out.println("os1: " + os1.getPage(0).getData(0));
+		try {
+			System.out.println("os1: " + os1.getPage(0).getData(0));
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
-		System.out.println("os2: " + os2.getPage(0).getData(0) + "\n");
+		try {
+			System.out.println("os2: " + os2.getPage(0).getData(0) + "\n");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 //		OS os1 = new OS("/Users/Krirk-Mac/Documents/workspace/OSProj2/src/proj2_data1.txt");
 //		System.out.println(os1.getPPN(2) == 5);
@@ -160,8 +176,18 @@ public class OS {
 		
 //		OS os2 = new OS("/Users/Krirk-Mac/Documents/workspace/OSProj2/src/proj2_data2.txt");
 		
-		System.out.println(os2.getPage(4).getData(3) == 114);
-		System.out.println(os2.getDataAtVirtAddress(45) == 115);
+//		try {
+//			System.out.println(os2.getPage(4).getData(30) == 114);
+//		} catch (Exception e) {
+//			// TODO Auto-generated catch block
+//			System.out.println(e.getMessage().equals("invalid offset"));
+//		}
+//		try {
+//			System.out.println(os2.getDataAtVirtAddress(45) == 115);
+//		} catch (Exception e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 //		System.out.println(os2.getPage(2).getData(13) == 115);
 		//45 = 101101 32 + 8 + 4 + 1
 

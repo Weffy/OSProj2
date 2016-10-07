@@ -28,14 +28,19 @@ public class Page {
 	//this method needs to throw an exception
 	//her test code is attempting a catch
 	//else it fails
-	public byte getData( int offset ) {
+	public byte getData( int offset ) throws Exception {
 		
 		try {
 			return this.getByte( offset );	
 		} catch (Exception e1) {
-			System.out.println("Invalid Offset...");
-			byte nullByte = (Byte) null;
-			return nullByte;
+//			System.out.println("invalid offset");
+//			throw new Exception("transction: " + transNbr); 
+//			throw new Exception("transction: " + transNbr, E); 
+
+//			System.out.println("offset: " + offset + " throwing exception...");
+			throw new Exception("invalid offset");
+//			byte nullByte = (Byte) null;
+//			return nullByte;
 		}
 		
 
