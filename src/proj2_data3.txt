@@ -1,0 +1,33 @@
+16 32
+0->12
+1->6
+2->0
+3->11
+4->9
+5->13
+6->14
+7->5
+8->1
+9->7
+10->8
+11->10
+12->4
+13->3
+14->15
+15->2
+For this file, there are 16 page
+s and 32 bytes of data in each p
+age.  Again, I have made such a 
+datafile by putting 32 character
+s on each line, and encoding sac
+h one using UTF-8, which encodes
+the Latin alphabet and punctuati
+using 8 bits, or 1 byte, per let
+ter. Letters from other alphabet
+s usually need more than 1 byte 
+to encode them, but I have not u
+see any in this example datafile
+. There are also other methods f
+or encoding characters as bits, 
+such as UTF-16, which uses 16 bi
+ts per letter. abcdefghijklmnopq
