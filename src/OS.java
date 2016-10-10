@@ -115,21 +115,67 @@ public class OS {
 	//to extract last 4 digits (offset), logical AND with 0b1111 (15 in decimal)
 	//to extract the 3 digits that precede the offset, logical AND with 0b1110000 (112 in decimal)
 	public byte getDataAtVirtAddress( int virtAddress ) throws Exception {
+		
+		//determine size of virtAddress
+		double vaLen, offsetLen, vpnLen; //bits necessary
+		double exponent = 0;
+		
+		while ( true ) {
+			if (Math.pow(2,  exponent) < virtAddress ) {
+				exponent++;
+			} else {
+				vaLen = exponent;
+				break;
+			}
+		}
+		System.out.println("vaLen: " + vaLen);
+		//we should arrive here with the exponent needed to accommodate all of the virtAddress
+		//find offset
+		exponent = 0;
+		while ( true ) {
+			if (Math.pow(2,  exponent) < Integer.parseInt( tableSizes[1] ) ) {
+				exponent++;
+			} else {
+				offsetLen = exponent;
+				break;
+			}
+		}
+		System.out.println("offsetLen: " + offsetLen);
+		//therefore, the # of bits needed for the vpn will be vaLen - offsetLen
+		vpnLen = vaLen - offsetLen;
+		
+		//vaLen will get me the bit string needed for extract
+		//vpnLen will get me the bit string needed for vpn
+		//offsetLen will get me the bit string needed for the offset
+		
+		
 //		System.out.println("virtAdd: " + virtAddress);
 		//not sure how I am supposed to use this method...
 		//extract last 7 bits...
 		//2^7-1 = 127
-		int extract = virtAddress & 0b1111111;
+//		int extract = virtAddress & 0b1111111;
+		int logicForExtract = (int) (Math.pow(2,  vaLen)-1);
+		System.out.println("log4Ext: " + logicForExtract);
+		int extract = virtAddress & logicForExtract;
 //		System.out.println("extract: " + extract);
 		
+		//offset is last 4 bits
+//		int offset = extract & 0b00001111;
+		int logicForOffset = (int) (Math.pow(2,  offsetLen)-1);
+		System.out.println("log4Offset: " + logicForOffset);
+		int offset = extract & logicForOffset;
+//		System.out.println("offset: " + offset);
+		
 		// 2^5 + 2^6 + 2^7
-		int vpn = extract & 0b1110000;
-		vpn = vpn >> 4;
+		
+//		int vpn = extract & 0b1110000;
+		int logicForVPN = (int) (Math.pow(2,  vpnLen)-1);
+		System.out.println("log4VPN: " + logicForVPN);
+		int vpn = extract & logicForVPN;
+		vpn = vpn >> (int)offsetLen-1; //moves over depending on teh size of the offset...
 //		System.out.println("vpn: " + vpn);
 		
-		//offset is last 4 bits
-		int offset = extract & 0b00001111;
-//		System.out.println("offset: " + offset);
+
 		
 		int ppn = getPPN(vpn);
 //		System.out.println("ppn: " + ppn);
@@ -153,22 +199,22 @@ public class OS {
 		OS os1 = new OS("/Users/Krirk-Mac/Documents/workspace/OSProj2/src/proj2_data1.txt");
 		System.out.println("\n\n\n\nData 2");
 		OS os2 = new OS("/Users/Krirk-Mac/Documents/workspace/OSProj2/src/proj2_data2.txt");
-		System.out.println("PPN " + os1.getPPN(2));
-		System.out.println("PPN " + os2.getPPN(2));
+//		System.out.println("PPN " + os1.getPPN(2));
+//		System.out.println("PPN " + os2.getPPN(2));
 		
-		try {
-			System.out.println("os1: " + os1.getPage(0).getData(0));
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+//		try {
+//			System.out.println("os1: " + os1.getPage(0).getData(0));
+//		} catch (Exception e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 		
-		try {
-			System.out.println("os2: " + os2.getPage(0).getData(0) + "\n");
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+//		try {
+//			System.out.println("os2: " + os2.getPage(0).getData(0) + "\n");
+//		} catch (Exception e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 		
 //		OS os1 = new OS("/Users/Krirk-Mac/Documents/workspace/OSProj2/src/proj2_data1.txt");
 //		System.out.println(os1.getPPN(2) == 5);
@@ -182,12 +228,12 @@ public class OS {
 //			// TODO Auto-generated catch block
 //			System.out.println(e.getMessage().equals("invalid offset"));
 //		}
-//		try {
-//			System.out.println(os2.getDataAtVirtAddress(45) == 115);
-//		} catch (Exception e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
+		try {
+			System.out.println(os2.getDataAtVirtAddress(45) == 115);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 //		System.out.println(os2.getPage(2).getData(13) == 115);
 		//45 = 101101 32 + 8 + 4 + 1
 
